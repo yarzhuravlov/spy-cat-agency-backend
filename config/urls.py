@@ -21,7 +21,8 @@ from django.contrib import admin
 from django.urls import path, include
 
 api_v1_urlpatterns = [
-    path("", include("cats.urls")),
+    path("cats/", include("cats.urls", namespace="cats")),
+    path("missions/", include("missions.urls", namespace="missions")),
 ]
 
 urlpatterns = [
