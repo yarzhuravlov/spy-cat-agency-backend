@@ -6,12 +6,17 @@ from missions.models import Mission
 
 class MissionService:
     @staticmethod
-    def get_cat_missions_for_update(request: Request) -> QuerySet[Mission]:
-        return (
-            Mission.objects.select_for_update()
-            .filter(cat_id=request.data.get("cat"))
-            .prefetch_related("targets")
-        )
+    def get_cat_missions_for_update(
+        request: Request,
+    ) -> QuerySet[Mission] | list:
+        if request.data.get("cat"):
+            return (
+                Mission.objects.select_for_update()
+                .filter(cat_id=request.data.get("cat"))
+                .prefetch_related("targets")
+            )
+
+        return []
 
     @staticmethod
     def has_incomplete_mission(missions: QuerySet[Mission]) -> bool:
