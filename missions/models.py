@@ -6,6 +6,7 @@ from cats.models import Cat
 class Mission(models.Model):
     cat = models.ForeignKey(
         Cat,
+        null=True,
         on_delete=models.CASCADE,
         related_name="missions",
     )
