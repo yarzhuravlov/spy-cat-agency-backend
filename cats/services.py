@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 import requests
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -68,11 +70,20 @@ class BreedService:
 class CatService:
     @staticmethod
     def create(**validated_data) -> Cat:
+        username = validated_data["name"].lower()
+        password = uuid4()
+
         with transaction.atomic():
             cat = Cat.objects.create(**validated_data)
             User.objects.create_user(
-                username=validated_data["name"].lower(),
+                username=username,
+                password=str(password),
                 agent=cat,
+            )
+
+            print(
+                f"Created User with username: {username} "
+                f"& password {password}"
             )
 
             return cat

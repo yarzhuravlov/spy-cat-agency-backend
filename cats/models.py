@@ -14,7 +14,9 @@ class Cat(models.Model):
         error_to_raise: type[Exception],
         cat_id=None,
     ):
-        if Cat.objects.filter(name__iexact=name.lower()).first().id != cat_id:
+        if (
+            cat := Cat.objects.filter(name__iexact=name.lower()).first()
+        ) and cat.id != cat_id:
             raise error_to_raise(
                 {"name": "Cat with this Name already exists."},
             )

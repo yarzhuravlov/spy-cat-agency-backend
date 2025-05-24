@@ -23,6 +23,7 @@ from django.urls import path, include
 api_v1_urlpatterns = [
     path("cats/", include("cats.urls", namespace="cats")),
     path("missions/", include("missions.urls", namespace="missions")),
+    path("accounts/", include("accounts.urls", namespace="accounts")),
 ]
 
 urlpatterns = [
