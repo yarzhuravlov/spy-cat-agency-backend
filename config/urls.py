@@ -20,7 +20,9 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
 
-api_v1_urlpatterns = []
+api_v1_urlpatterns = [
+    path("", include("cats.urls")),
+]
 
 urlpatterns = [
     path("admin/", admin.site.urls),
