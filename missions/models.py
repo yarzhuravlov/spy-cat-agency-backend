@@ -11,6 +11,10 @@ class Mission(models.Model):
         related_name="missions",
     )
 
+    @property
+    def is_completed(self):
+        return all(target.is_completed for target in self.targets.all())
+
 
 class Target(models.Model):
     mission = models.ForeignKey(

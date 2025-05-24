@@ -27,7 +27,7 @@ class MissionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Mission
-        fields = ["id", "cat", "targets"]
+        fields = ["id", "cat", "targets", "is_completed"]
 
     def validate_targets(self, value):
         if not 1 <= len(value) <= 3:
