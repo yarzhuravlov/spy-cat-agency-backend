@@ -47,6 +47,11 @@ class MissionSerializer(serializers.ModelSerializer):
         return mission
 
 
+class AssignCatToMissionSerializer(MissionSerializer):
+    class Meta(MissionSerializer.Meta):
+        fields = ["cat"]
+
+
 class NoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Note
