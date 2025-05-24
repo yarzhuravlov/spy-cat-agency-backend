@@ -149,3 +149,7 @@ if DEBUG:
     REST_FRAMEWORK["DEFAULT_AUTHENTICATION_CLASSES"].append(
         "rest_framework.authentication.SessionAuthentication"
     )
+
+BREED_API_URL = "https://api.thecatapi.com/v1/breeds"
+BREED_LIMIT_BY_REQUEST = 60
+BREED_START_PAGE = 0
