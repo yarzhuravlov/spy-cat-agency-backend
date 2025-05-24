@@ -9,3 +9,10 @@ class DeleteIfIsUnassigned(permissions.BasePermission):
             return not obj.cat
 
         return True
+
+
+class IsCatAssignedToMission(permissions.IsAdminUser):
+    def has_object_permission(self, request, view, obj):
+        mission = obj if isinstance(obj, Mission) else obj.mission
+
+        return mission.cat == request.user

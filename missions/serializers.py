@@ -3,13 +3,13 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from cats.models import Cat
-from missions.models import Mission, Target
+from missions.models import Mission, Target, Note
 
 
 class TargetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Target
-        fields = ["mission", "name", "country", "is_completed"]
+        fields = ["id", "mission", "name", "country", "is_completed"]
 
 
 class TargetCreateSerializer(TargetSerializer):
@@ -45,3 +45,21 @@ class MissionSerializer(serializers.ModelSerializer):
                 Target.objects.create(**target_data, mission=mission)
 
         return mission
+
+
+class NoteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Note
+        fields = ["target", "text", "created_at"]
+        read_only_fields = ["target", "created_at"]
+
+
+class TargetRetrieveSerializer(TargetSerializer):
+    notes = NoteSerializer(many=True)
+
+    class Meta(TargetSerializer.Meta):
+        fields = ["id", "name", "country", "is_completed", "notes"]
+
+
+class MissionRetrieveSerializer(MissionSerializer):
+    targets = TargetRetrieveSerializer(many=True)
