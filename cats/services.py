@@ -51,7 +51,11 @@ class BreedService:
         self,
         breed_name: str,
         error_to_rise=type[Exception],
+        raising_payload=None
     ) -> str | None:
+        if raising_payload is None:
+            raising_payload = {"breed": "Breed is invalid."}
+
         page = settings.BREED_START_PAGE
 
         while breeds := self.make_request(self.breed_list_limit, page):
@@ -63,7 +67,7 @@ class BreedService:
             page += 1
 
         raise error_to_rise(
-            {"breed": "Breed is invalid."},
+            raising_payload,
         )
 
 
