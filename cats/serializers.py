@@ -13,10 +13,12 @@ class CatSerializer(serializers.ModelSerializer):
         fields = ["id", "name", "years_of_experience", "breed", "salary"]
 
     def validate_breed(self, value):
-        return breed_service.validate(value, ValidationError)
+        return breed_service.validate(
+            value, ValidationError, "Breed is invalid."
+        )
 
     def validate_name(self, value):
-        Cat.validate_name(value, ValidationError)
+        Cat.validate_name(value, ValidationError, raising_payload="Cat with this Name already exists.")
         return value
 
     def create(self, validated_data):

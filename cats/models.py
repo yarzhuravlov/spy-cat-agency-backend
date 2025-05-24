@@ -13,12 +13,15 @@ class Cat(models.Model):
         name: str,
         error_to_raise: type[Exception],
         cat_id=None,
+        raising_payload=None
     ):
+        if raising_payload is None:
+            raising_payload = {"name": "Cat with this Name already exists."}
         if (
             cat := Cat.objects.filter(name__iexact=name.lower()).first()
         ) and cat.id != cat_id:
             raise error_to_raise(
-                {"name": "Cat with this Name already exists."},
+                raising_payload,
             )
 
     def clean(self):
