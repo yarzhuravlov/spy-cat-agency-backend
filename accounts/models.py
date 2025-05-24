@@ -5,4 +5,9 @@ from cats.models import Cat
 
 
 class User(AbstractUser):
-    agent = models.ForeignKey(Cat, null=True, on_delete=models.CASCADE)
+    agent = models.OneToOneField(
+        Cat,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name="user",
+    )
