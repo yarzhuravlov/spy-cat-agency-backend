@@ -9,14 +9,18 @@ class Cat(models.Model):
     salary = models.PositiveIntegerField()
 
     @staticmethod
-    def validate_name(name: str, error_to_raise: type[Exception]):
-        if Cat.objects.filter(name__iexact=name):
+    def validate_name(
+        name: str,
+        error_to_raise: type[Exception],
+        cat_id=None,
+    ):
+        if Cat.objects.filter(name__iexact=name.lower()).first().id != cat_id:
             raise error_to_raise(
                 {"name": "Cat with this Name already exists."},
             )
 
     def clean(self):
-        Cat.validate_name(self.name, ValidationError)
+        Cat.validate_name(self.name, ValidationError, self.id)
 
     def save(
         self,
