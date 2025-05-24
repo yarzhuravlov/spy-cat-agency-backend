@@ -47,8 +47,14 @@ class MissionSerializer(serializers.ModelSerializer):
         return mission
 
 
-class AssignCatToMissionSerializer(MissionSerializer):
-    class Meta(MissionSerializer.Meta):
+class AssignCatToMissionSerializer(serializers.ModelSerializer):
+    cat = serializers.PrimaryKeyRelatedField(
+        queryset=Cat.objects.all(),
+        required=True,
+    )
+
+    class Meta:
+        model = Mission
         fields = ["cat"]
 
 

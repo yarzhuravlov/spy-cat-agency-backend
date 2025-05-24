@@ -30,6 +30,7 @@ class MissionViewSet(
     mixins.RetrieveModelMixin,
     mixins.DestroyModelMixin,
     viewsets.GenericViewSet,
+    mixins.UpdateModelMixin,
 ):
     queryset = Mission.objects.all()
     serializer_class = MissionSerializer
@@ -47,7 +48,7 @@ class MissionViewSet(
         with transaction.atomic():
             serializer = self.get_serializer_class()(
                 instance=self.get_object(),
-                data={"cat": request.data["cat"]},
+                data=request.data,
             )
 
             serializer.is_valid(raise_exception=True)
@@ -101,11 +102,7 @@ class TargetViewSet(BaseViewSetMixin, viewsets.GenericViewSet):
 
     @action(detail=True, methods=["POST"], url_path="note")
     def add_note(self, request, *args, **kwargs):
-        serializer = self.get_serializer_class()(
-            data={
-                "text": request.data["text"],
-            }
-        )
+        serializer = self.get_serializer_class()(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save(target=self.get_object())
 
