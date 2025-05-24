@@ -30,7 +30,6 @@ class MissionViewSet(
     mixins.RetrieveModelMixin,
     mixins.DestroyModelMixin,
     viewsets.GenericViewSet,
-    mixins.UpdateModelMixin,
 ):
     queryset = Mission.objects.all()
     serializer_class = MissionSerializer
