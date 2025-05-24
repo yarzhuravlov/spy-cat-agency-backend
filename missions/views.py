@@ -1,11 +1,15 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, mixins
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
 from base.mixins import BaseViewSetMixin
 from missions.models import Mission, Target
-from missions.permissions import DeleteIfIsUnassigned, IsCatAssignedToMission
+from missions.permissions import (
+    DeleteIfIsUnassigned,
+    IsCatAssignedToMission,
+    IsTaskNotCompleted,
+)
 from missions.serializers import (
     MissionSerializer,
     TargetSerializer,
@@ -15,7 +19,14 @@ from missions.serializers import (
 )
 
 
-class MissionViewSet(BaseViewSetMixin, viewsets.ModelViewSet):
+class MissionViewSet(
+    BaseViewSetMixin,
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.DestroyModelMixin,
+    viewsets.GenericViewSet,
+):
     queryset = Mission.objects.all()
     serializer_class = MissionSerializer
     permission_classes = [IsAuthenticated, DeleteIfIsUnassigned]
@@ -35,6 +46,14 @@ class TargetViewSet(BaseViewSetMixin, viewsets.GenericViewSet):
 
     action_serializers = {
         "add_note": NoteSerializer,
+    }
+
+    action_permissions = {
+        "add_note": [
+            IsAuthenticated,
+            IsAdminUser | IsCatAssignedToMission,
+            IsTaskNotCompleted,
+        ]
     }
 
     @action(detail=True, methods=["GET"], url_path="complete")
